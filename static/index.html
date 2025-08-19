@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ScripturaAI</title>
+    <link rel="stylesheet" href="/static/css/index.css">
+
+</head>
+<body>
+    <div class="container">
+        <h1>Scriptura.AI</h1>
+        <p>Enter a Bible excerpt to receive an explanation:</p>
+        <textarea id="excerpt" placeholder="Ex: John 3:16"></textarea>
+        <div class="buttons">
+            <button onclick="sendRequest('simple-explanation')">Simple Explanation</button>
+            <button onclick="sendRequest('literal-explanation')">Literal Explanation</button>
+            <button onclick="sendRequest('interpretation-explanation')">Interpretation Explanation</button>
+        </div>
+        <div id="response"></div>
+    </div>
+    <script>
+        async function sendRequest(type) {
+            const excerpt = document.getElementById('excerpt').value.trim();
+            const responseDiv = document.getElementById('response');
+            if (!excerpt) {
+                responseDiv.innerText = "Please enter a Bible excerpt before requesting an explanation.";
+                return;
+            }
+            responseDiv.innerText = "Loading...";
+            try {
+                const resp = await fetch(`/${type}`, {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({excerpt: excerpt})
+                });
+                if (resp.ok) {
+                    const data = await resp.json();
+                    responseDiv.innerText = data.explanation;
+                } else {
+                    const errorData = await resp.json();
+                    responseDiv.innerText = errorData.detail
+                        ? `Error: ${errorData.detail}`
+                        : "Error fetching explanation.";
+                }
+            } catch (error) {
+                responseDiv.innerText = "Network error or server unavailable.";
+            }
+        }
+    </script>
+</body>
+</html>
