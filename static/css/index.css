@@ -1,5 +1,5 @@
 body {
-    background: #4059b1;
+    background: linear-gradient(90deg, blue, purple);
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
@@ -50,7 +50,7 @@ button {
     transition: background 0.2s;
 }
 button:hover {
-    background: #74b9ff;
+    background: #3779bb;
 }
 #response {
     margin-top: 16px;
